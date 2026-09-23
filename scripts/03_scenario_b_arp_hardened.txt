@@ -1,0 +1,25 @@
+# Scenario B - ARP-hardened resistance to on-path interception
+# Run inside the Mininet CLI, with the ALLOW flows from script 01 active.
+
+# --- Open a terminal for the attacker host ---
+xterm h3
+
+# --- In h3's xterm: poison both victims' ARP caches ---
+arpspoof -i h3-eth0 -t 10.0.0.1 10.0.0.2 &
+arpspoof -i h3-eth0 -t 10.0.0.2 10.0.0.1 &
+
+# Confirm poisoning succeeded (h1's cache should now claim h2 is at h3's MAC)
+# From a normal shell, using h1's Mininet process pid (`ps aux | grep mininet:h1`):
+#   sudo mnexec -a <h1_pid> ip neigh show
+
+# --- Back in the mininet CLI: test connectivity under active poisoning ---
+h1 ping -c5 h2
+# Expected: 5/5 received, 0% packet loss -- the switch rewrites the Ethernet
+# destination itself (script 01), so it does not matter that h1's ARP cache
+# points at h3.
+
+# --- Confirm zero interception at the attacker ---
+h3 timeout 6 tcpdump -i h3-eth0 -n icmp
+# (run the ping above again during this capture window)
+# Expected: 0 packets captured -- h3 never even sees the ICMP traffic,
+# confirming strict point-to-point delivery, not flooding or relaying.

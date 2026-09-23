@@ -1,0 +1,22 @@
+# Scenario A - SR7: default-deny baseline + exfiltration containment
+# Run these lines inside the Mininet CLI (the `mininet>` prompt left open
+# by mininet/start_topology.sh), after 01_install_default_deny_flows.sh
+# has been run in a separate terminal.
+
+# --- Baseline: h1 -> h4 must be totally unreachable (no flow exists) ---
+h1 ping -c2 h4
+# Expected: 100% packet loss, "Destination Host Unreachable"
+
+# --- Exfiltration attempt: h1 tries to reach the unauthorized host h4 ---
+h4 tcpdump -i h4-eth0 -c 5 -w /tmp/sr7_exfil.pcap &
+h1 timeout 5 nc -vz h4 4444
+# Expected: "nc: connect to 10.0.0.4 port 4444 (tcp) failed: No route to host"
+
+h4 tcpdump -r /tmp/sr7_exfil.pcap
+# Expected: 0 packets belonging to the exfiltration attempt.
+# The only packets captured over the window are ONOS's own LLDP
+# topology-discovery traffic (control-plane noise, not exfiltrated payload).
+
+# --- Confirm the authorized pair still works ---
+h1 ping -c2 h2
+# Expected: 0% packet loss (the ALLOW flow from script 01 is active).
