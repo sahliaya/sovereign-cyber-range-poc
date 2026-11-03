@@ -1,0 +1,4 @@
+vyos/*.iso
+vyos/*.qcow2
+__pycache__/
+*.pyc

@@ -1,0 +1,63 @@
+VyOS console commands -- NFV router/firewall sub-test
+======================================================
+Run run_vyos_nfv_test.sh first (sets up the tap/netns/OVS wiring and ONOS
+flows), then boot VyOS with the qemu command it prints, then paste the
+commands below at the console. Verified working, live, against
+VyOS 2026.11.03-1127-rolling (current/rolling branch) -- the two state
+rules below are deliberately written as valueless flags (no 'enable'
+argument): that's the syntax this branch actually accepts, not the older
+documentation's `state established 'enable'` form, which this build
+rejects with "is not valid".
+
+Log in: vyos / vyos
+
+--- interfaces ---
+configure
+set interfaces ethernet eth0 address 10.0.0.9/24
+set interfaces ethernet eth1 address 203.0.113.9/24
+set system host-name vyos-pocgw
+commit
+
+--- verify before adding the firewall (optional sanity check) ---
+exit
+show interfaces
+configure
+
+--- forward filter: allow replies to traffic we initiated, and new ICMP
+    from the inside subnet to the outside subnet; drop (and log) everything
+    else by default, including any unsolicited connection FROM outside ---
+set firewall ipv4 forward filter default-action 'drop'
+set firewall ipv4 forward filter default-log
+set firewall ipv4 forward filter rule 10 action 'accept'
+set firewall ipv4 forward filter rule 10 state established
+set firewall ipv4 forward filter rule 10 state related
+set firewall ipv4 forward filter rule 20 action 'accept'
+set firewall ipv4 forward filter rule 20 protocol 'icmp'
+set firewall ipv4 forward filter rule 20 source address '10.0.0.0/24'
+set firewall ipv4 forward filter rule 20 destination address '203.0.113.0/24'
+
+--- input filter: VyOS's own management plane is deny-by-default too, not
+    just the forwarded/transit traffic -- otherwise the forward filter
+    alone would leave an unexamined gap exactly like the original ARP
+    flood-rule bug this PoC already fixed once (locking one layer while
+    leaving an adjacent one open by omission) ---
+set firewall ipv4 input filter default-action 'drop'
+set firewall ipv4 input filter default-log
+set firewall ipv4 input filter rule 10 action 'accept'
+set firewall ipv4 input filter rule 10 state established
+set firewall ipv4 input filter rule 10 state related
+set firewall ipv4 input filter rule 20 action 'accept'
+set firewall ipv4 input filter rule 20 inbound-interface name 'lo'
+commit
+exit
+
+Now run run_vyos_nfv_test_2.sh (host side, separate terminal with sudo) to
+run the actual tests. When it's done, come back here and run:
+
+  show log firewall
+
+to see the drop/log evidence, then:
+
+  poweroff
+
+to cleanly shut the VM down (it's a live-ISO boot, nothing to save).

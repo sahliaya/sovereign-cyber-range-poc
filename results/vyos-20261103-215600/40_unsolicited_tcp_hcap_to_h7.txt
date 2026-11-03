@@ -1,0 +1,2 @@
+nc: connect to 10.0.0.254 port 4444 (tcp) timed out: Operation now in progress
+# exit=124 (timed out, not refused -- confirms silent drop, not absence of route)

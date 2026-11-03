@@ -1,0 +1,8 @@
+PING 203.0.113.10 (203.0.113.10) 56(84) bytes of data.
+64 bytes from 203.0.113.10: icmp_seq=1 ttl=63 time=0.955 ms
+64 bytes from 203.0.113.10: icmp_seq=2 ttl=63 time=0.408 ms
+64 bytes from 203.0.113.10: icmp_seq=3 ttl=63 time=0.519 ms
+
+--- 203.0.113.10 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2013ms
+rtt min/avg/max/mdev = 0.408/0.627/0.955/0.236 ms

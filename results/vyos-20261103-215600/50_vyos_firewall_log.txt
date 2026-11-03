@@ -1,0 +1,10 @@
+Nov 03 20:53:10 kernel: [ipv4-FWD-filter-default-D]IN=eth1 OUT=eth0 MAC=52:54:00:00:00:09:00:00:00:00:00:0a:08:00 SRC=203.0.113.10 DST=10.0.0.254 LEN=60 TOS=0x00 PREC=0x00
+Nov 03 20:53:11 kernel: [ipv4-FWD-filter-default-D]IN=eth1 OUT=eth0 MAC=52:54:00:00:00:09:00:00:00:00:00:0a:08:00 SRC=203.0.113.10 DST=10.0.0.254 LEN=60 TOS=0x00 PREC=0x00
+Nov 03 20:53:12 kernel: [ipv4-FWD-filter-default-D]IN=eth1 OUT=eth0 MAC=52:54:00:00:00:09:00:00:00:00:00:0a:08:00 SRC=203.0.113.10 DST=10.0.0.254 LEN=84 TOS=0x00 PREC=0x00
+Nov 03 20:53:13 kernel: [ipv4-FWD-filter-default-D]IN=eth1 OUT=eth0 MAC=52:54:00:00:00:09:00:00:00:00:00:0a:08:00 SRC=203.0.113.10 DST=10.0.0.254 LEN=84 TOS=0x00 PREC=0x00
+Nov 03 20:53:14 kernel: [ipv4-FWD-filter-default-D]IN=eth1 OUT=eth0 MAC=52:54:00:00:00:09:00:00:00:00:00:0a:08:00 SRC=203.0.113.10 DST=10.0.0.254 LEN=84 TOS=0x00 PREC=0x00
+Nov 03 20:54:07 kernel: [ipv4-FWD-filter-default-D]IN=eth1 OUT=eth0 MAC=52:54:00:00:00:09:00:00:00:00:00:0a:08:00 SRC=203.0.113.10 DST=10.0.0.254 LEN=84 TOS=0x00 PREC=0x00
+Nov 03 20:54:08 kernel: [ipv4-FWD-filter-default-D]IN=eth1 OUT=eth0 MAC=52:54:00:00:00:09:00:00:00:00:00:0a:08:00 SRC=203.0.113.10 DST=10.0.0.254 LEN=84 TOS=0x00 PREC=0x00
+# LEN=60 entries: the dropped nc/SYN attempt (test 40). LEN=84 entries: the dropped ICMP echo attempts (test 41).
+# [ipv4-FWD-filter-default-D] = forward-chain default rule, action Drop -- confirms this is the explicit
+# default-action 'drop' catching unmatched traffic, not a misconfigured specific rule.

@@ -1,0 +1,17 @@
+=== Sovereign PoC VyOS/NFV router-firewall evidence run ===
+Closes the SDN/NFV capability-column gap: a second, ACTIVE NFV function
+(VyOS, router + stateful firewall) chained by the controller, complementing
+the passive Suricata IDS mirror (sec:poc-nfv). Demonstrates default-deny
+enforced by the VNF itself, not just the OVS/ONOS flow layer.
+
+Topology addition (single slice, h1..h7 unchanged):
+  h7 (boundary gateway stand-in, 10.0.0.254) --- vyos-in (10.0.0.9, port8)
+  VyOS routes/firewalls between its two interfaces
+  vyos-out (203.0.113.9, port9) --- hcap (203.0.113.10, port10, "outside")
+
+ONOS flows: gateway-style ALLOW (IN_PORT+ETH_SRC+ETH_TYPE, no dest-IP
+restriction, since VyOS itself -- not the switch -- makes the L3/firewall
+decision) for h7<->vyos-in and vyos-out<->hcap, plus the already-fixed
+non-flooding arp_allow() for both pairs. Device-wide catch-all DENY
+(prio 1, zero criteria) covers everything else on these new ports too --
+verified no regression of the original ARP-flood bug at the OVS layer.

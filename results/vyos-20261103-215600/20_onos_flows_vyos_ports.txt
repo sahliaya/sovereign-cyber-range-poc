@@ -1,0 +1,6 @@
+ADDED in_port=8 ethType=0x806 prio=51000
+ADDED in_port=10 ethType=0x800 prio=51000
+ADDED in_port=10 ethType=0x806 prio=51000
+ADDED in_port=9 ethType=0x800 prio=51000
+ADDED in_port=9 ethType=0x806 prio=51000
+ADDED in_port=8 ethType=0x800 prio=51000
