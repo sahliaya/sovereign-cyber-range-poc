@@ -1,0 +1,1 @@
+alert icmp any any -> any any (msg:"steered-to-IDS"; sid:1;)

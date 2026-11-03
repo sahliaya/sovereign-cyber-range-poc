@@ -1,0 +1,1 @@
+ONOS/JVM RSS: 943 MiB

@@ -1,0 +1,2 @@
+ADDED (40 rules, 4 slice(s))
+wall time: 6.628745277s
