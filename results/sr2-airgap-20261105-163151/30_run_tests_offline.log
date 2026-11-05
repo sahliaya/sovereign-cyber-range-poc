@@ -1,0 +1,30 @@
+=== Sovereign PoC evidence run 20261105-163246 ===
+host: Linux kali 7.0.12+kali-amd64 #1 SMP PREEMPT_DYNAMIC Kali 7.0.12-2kali1 (2026-06-18) x86_64 GNU/Linux
+onos: ONOS version: 3.0.0.b'eec5f9653c\n' org.onosproject.openflow: ACTIVE org.onosproject.fwd: INSTALLED org.onosproject.proxyarp: INSTALLED of:0000000000000001 available: True 
+ovs : ovs-vsctl (Open vSwitch) 3.7.1
+[..]  recording idle + per-process footprint (baseline, before policy)
+[ok]  footprint baseline saved (01_*)
+[..]  default-deny baseline: every pair should fail with no flow installed
+[ok]  baseline deny saved (10_*)
+[..]  installing scoped policy (scoped ARP, IPv4 allow h1<->h2 mirrored to h6, h1<->h5:11434)
+ADDED (10 rules, 1 slice(s))
+[..]  SR7: authorized h1<->h2 should pass; h1->h4 and h2->h4 should be blocked
+[ok]  SR7 exfiltration evidence saved (30_*, 31_*)
+[..]  covert-channel ARP from h3 -> should NOT reach h4 under scoped ARP
+[ok]  covert-channel evidence saved (40_*)  [0 at h4 = scoped ARP holds]
+[..]  arpspoof h3 against h1<->h2; authorized ping must still hold, h3 sees 0
+[ok]  ARP-poisoning resistance evidence saved (50_*)  [0 ICMP at h3 = pass]
+[..]  AI egress: h1->h5 inference allowed; h5->h4 and h5->outside blocked by flows
+[ok]  bounded-AI egress evidence saved (60_*, 61_*)
+[..]  scaling: install 1,2,4,8 concurrent slices' worth of deny rules; time install + load
+[ok]  scaling evidence saved (70_*)
+[ok]  footprint-under-policy evidence saved (80_*)
+
+=== DONE. Evidence in: /home/toften/Desktop/PHD/sovereign-cyber-range-poc/results/20261105-163246 ===
+Key files for the paper:
+  31_h4_packetcount.txt   SR7 zero-egress
+  40_h4_arp_count.txt     covert-ARP blocked (fixes the flood-rule hole)
+  50_h3_icmp_count.txt    ARP-poisoning resistance
+  61_h5_*_blocked.txt     AI egress enforced at network layer
+  70_scaling.txt          control-plane scaling
+  80_onos_jvm_rss.txt     852 MiB attributed to JVM

@@ -1,0 +1,2 @@
+ping: connect: Network is unreachable
+exit=2

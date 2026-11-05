@@ -1,0 +1,5 @@
+ONOS version: 3.0.0.b'eec5f9653c\n'
+org.onosproject.openflow: ACTIVE
+org.onosproject.fwd: INSTALLED
+org.onosproject.proxyarp: INSTALLED
+of:0000000000000001 available: True

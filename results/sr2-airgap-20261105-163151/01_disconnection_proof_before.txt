@@ -1,0 +1,7 @@
+--- attempt 1: ping a public resolver ---
+ping: connect: Network is unreachable
+exit=2
+--- attempt 2: DNS resolution ---
+exit=2
+--- attempt 3: HTTPS fetch ---
+http_code=000

@@ -1,0 +1,7 @@
+--- ONOS Docker image ---
+onosproject/onos:latest (876MB)
+--- Ollama model ---
+"name":"qwen2.5:1.5b"
+--- mininet / openvswitch already installed ---
+ii  mininet            2.3.0-2      amd64        process-based network emulator
+ii  openvswitch-switch 3.7.1-3      amd64        Open vSwitch switch implementations
